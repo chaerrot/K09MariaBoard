@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee;
+	 http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd" id="WebApp_ID" version="4.0">
+  <display-name>K08JSPServlet</display-name>
+  <context-param>
+    <param-name>INIT_PARAM</param-name>
+    <param-value>web.xml에 저장한 초기화 매개변수</param-value>
+  </context-param>
+  <welcome-file-list>
+    <welcome-file>index.html</welcome-file>
+    <welcome-file>index.htm</welcome-file>
+    <welcome-file>index.jsp</welcome-file>
+    <welcome-file>default.html</welcome-file>
+    <welcome-file>default.jsp</welcome-file>
+    <welcome-file>HelloJSP.jsp</welcome-file>
+  </welcome-file-list>
+  <!-- 마리아DB 연결정보 컨텍스트 초기화 파라미터로 추가하기 -->
+  <context-param>
+    <param-name>MariaDBDriver</param-name>
+    <param-value>org.mariadb.jdbc.Driver</param-value>
+  </context-param>
+  <context-param>
+    <param-name>MariaDBURL</param-name>
+    <param-value>jdbc:mariadb://127.0.0.1:3306/kosmo_db</param-value>
+  </context-param>
+  <context-param>
+    <param-name>MariaDBId</param-name>
+    <param-value>kosmo_user</param-value>
+  </context-param>
+  <context-param>
+    <param-name>MariaDBPwd</param-name>
+    <param-value>1234</param-value>
+  </context-param>
+  <session-config>
+    <session-timeout>10</session-timeout>
+  </session-config>
+  <filter>
+    <filter-name>SetCharEncoding</filter-name>
+    <filter-class>org.apache.catalina.filters.SetCharacterEncodingFilter</filter-class>
+    <init-param>
+      <param-name>encoding</param-name>
+      <param-value>utf-8</param-value>
+    </init-param>
+  </filter>
+  <filter-mapping>
+    <filter-name>SetCharEncoding</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+  <context-param>
+    <param-name>POSTS_PER_PAGE</param-name>
+    <param-value>5</param-value>
+  </context-param>
+  <context-param>
+    <param-name>PAGES_PER_BLOCK</param-name>
+    <param-value>5</param-value>
+  </context-param>
+  
+  <!-- HelloServlet.jsp에 작성한 요청명에 대한 매핑 -->
+  <servlet> <!-- 서블릿 등록 -->
+  	<servlet-name>HelloServlet</servlet-name>
+  	<servlet-class>servlet.HelloServlet</servlet-class>
+  </servlet>
+  <servlet-mapping> <!-- 서블릿과 요청명 매핑 -->
+  	<servlet-name>HelloServlet</servlet-name>
+  	<url-pattern>/13Servlet/HelloServlet.do</url-pattern>
+  </servlet-mapping>
+  
+  <!-- 서블릿에서 즉시 출력하기 요청명 매칭 -->
+  <servlet>
+  	<servlet-name>DirectServletPrint</servlet-name>
+  	<servlet-class>servlet.DirectServletPrint</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>DirectServletPrint</servlet-name>
+  	<url-pattern>/13Servlet/DirectServletPrint.do</url-pattern>
+  </servlet-mapping>
+  
+  <!-- MVC 패턴으로 회원인증하기 매핑 처리 -->
+  <servlet>
+  	<servlet-name>MemberAuth</servlet-name>
+  	<servlet-class>servlet.MemberAuth</servlet-class>
+  	<init-param>
+  		<param-name>admin_id</param-name>
+  		<param-value>nakja</param-value>
+  	</init-param>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>MemberAuth</servlet-name>
+  	<url-pattern>/13Servlet/MemberAuth.mvc</url-pattern>
+  </servlet-mapping>
+  
+  <!-- Model2 방식의 게시판 구현하기 -->
+  <!-- 리스트(목록) 서블릿 매핑 -->
+  <servlet>
+  	<servlet-name>MVCBoardList</servlet-name>
+  	<servlet-class>model2.mvcboard.ListController</servlet-class> <!-- 서블릿 클래스 -->
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>MVCBoardList</servlet-name> <!-- 서블릿명 -->
+  	<url-pattern>/mvcboard/list.do</url-pattern> <!-- 요청명 -->
+  </servlet-mapping>
+  
+  <!-- 글쓰기 서블릿 매핑 -->
+  <servlet>
+  	<servlet-name>MVCBoardWrite</servlet-name>
+  	<servlet-class>model2.mvcboard.WriteController</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>MVCBoardWrite</servlet-name>
+  	<url-pattern>/mvcboard/write.do</url-pattern>
+  </servlet-mapping>
+  <!-- 첨부파일의 제한 용량 -->
+  <context-param>
+  	<param-name>maxPostSize</param-name>
+  	<param-value>1024000</param-value>
+  </context-param>
+  
+  
+  
+</web-app>
